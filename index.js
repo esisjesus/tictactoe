@@ -1,7 +1,6 @@
 const gameBoard = (function() {
     let board = [0,1,2,3,4,5,6,7,8]
     let _game = board
-    let winningResults = Array(9).fill(false)
     const updateGameBoard = function(sign, cellNumber) {
         _game[cellNumber] = sign
         winningResults = [
@@ -15,7 +14,7 @@ const gameBoard = (function() {
         _game[6] == _game[7] && _game[6] == _game[8],
         ]
     }
-    return {board, winningResults, updateGameBoard, _game}
+    return {board, updateGameBoard, _game}
 })()
 
 const displayController = (function () {
@@ -45,6 +44,9 @@ const displayController = (function () {
         dismountChoose: function(){
             let chooseContainer = document.getElementById("choose-container")
             chooseContainer.style.display="none"
+        },
+        updateGameMoves: function(){
+            
         }
     }
 })()
@@ -54,9 +56,6 @@ const flowController = (function () {
     
     return{
         init: function () {
-            let player1 = null
-            let player2 = null
-            let currentPlayer = null
             displayController.displayChoose()
             displayController.displayBoard()
         },
@@ -77,7 +76,7 @@ const flowController = (function () {
         }
         ,
         checkWon: function(){
-            gameBoard.winningResults.includes(true) && console.log("wind")
+            winningResults.includes(true) && console.log("win")
         },
         currentPlayerPlay:function(cell){
             currentPlayer.playTurn(currentPlayer.sign, cell)
@@ -90,6 +89,8 @@ const player = function(sign) {
         sign,
         playTurn: function (playerSign, cellNumber) {
             gameBoard.updateGameBoard(playerSign, cellNumber)
+            displayController.updateGameMoves()
+            flowController.checkWon()
             flowController.togglePlayers()
         }
     }
