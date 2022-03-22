@@ -20,6 +20,14 @@ body{
 }
 .board div{
     border: solid #fff 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.board div span{
+    position:absolute;
+    font-size: 150px;
 }
 .choose_container{
     height: 100vh;

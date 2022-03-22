@@ -1,6 +1,7 @@
 const gameBoard = (function() {
     let board = [0,1,2,3,4,5,6,7,8]
     let _game = board
+    totalMoves = 0
     const updateGameBoard = function(sign, cellNumber) {
         _game[cellNumber] = sign
         winningResults = [
@@ -13,8 +14,12 @@ const gameBoard = (function() {
         _game[2] == _game[5] && _game[2] == _game[8],
         _game[6] == _game[7] && _game[6] == _game[8],
         ]
+
+        totalMoves++
+
+        displayController.displayGameMoves(sign, cellNumber)
     }
-    return {board, updateGameBoard, _game}
+    return {board, updateGameBoard}
 })()
 
 const displayController = (function () {
@@ -45,9 +50,28 @@ const displayController = (function () {
             let chooseContainer = document.getElementById("choose-container")
             chooseContainer.style.display="none"
         },
-        updateGameMoves: function(){
-            
+        displayGameMoves: function(sign, cell){
+            let thisCell = document.getElementById(`cell_${cell}`)
+            let cellContent = `<span>${sign.toUpperCase()}</span>`
+
+            thisCell.innerHTML = cellContent
+            thisCell.onclick = ""
+        },
+        showWinner: function(sign){
+            let body = document.getElementsByTagName("body")[0]
+            body.innerHTML += 
+            `<div id="choose-container" class="choose_container">
+                    <h1>Player ${sign.toUpperCase()} won!</h1>
+            </div>`
+        },
+        showTie: function(){
+            let body = document.getElementsByTagName("body")[0]
+            body.innerHTML += 
+            `<div id="choose-container" class="choose_container">
+                    <h1>It's a tie!</h1>
+            </div>`
         }
+
     }
 })()
 
@@ -76,7 +100,8 @@ const flowController = (function () {
         }
         ,
         checkWon: function(){
-            winningResults.includes(true) && console.log("win")
+            winningResults.includes(true) && displayController.showWinner(currentPlayer.sign)
+            !winningResults.includes(true) && totalMoves == 9? displayController.showTie() : null
         },
         currentPlayerPlay:function(cell){
             currentPlayer.playTurn(currentPlayer.sign, cell)
@@ -89,7 +114,6 @@ const player = function(sign) {
         sign,
         playTurn: function (playerSign, cellNumber) {
             gameBoard.updateGameBoard(playerSign, cellNumber)
-            displayController.updateGameMoves()
             flowController.checkWon()
             flowController.togglePlayers()
         }
