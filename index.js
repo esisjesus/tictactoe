@@ -91,7 +91,7 @@ const flowController = (function () {
                 player1 = player("o")
                 player2 = player("x")
             }
-            currentPlayer = player2
+            currentPlayer = player1
 
             displayController.dismountChoose()
         },
@@ -105,6 +105,9 @@ const flowController = (function () {
         },
         currentPlayerPlay:function(cell){
             currentPlayer.playTurn(currentPlayer.sign, cell)
+        },
+        reinitGame: function(){
+            
         }
     }
 })()
